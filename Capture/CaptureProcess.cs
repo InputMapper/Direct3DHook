@@ -1,39 +1,33 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using EasyHook;
+using System.Diagnostics;
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels.Ipc;
-using System.IO;
-using Capture.Interface;
-using System.Diagnostics;
 using System.Threading;
 using Capture.Hook;
-using System.Security.Principal;
-using System.Security.Cryptography;
-using System.Security.AccessControl;
-using System.Runtime.Remoting.Channels;
-using System.Runtime.Serialization.Formatters;
+using Capture.Interface;
+using EasyHook;
 
 namespace Capture
 {
     public class CaptureProcess : IDisposable
     {
         /// <summary>
-        /// Must be null to allow a random channel name to be generated
+        ///     Must be null to allow a random channel name to be generated
         /// </summary>
-        string _channelName = null;
+        private readonly string _channelName;
+
         private IpcServerChannel _screenshotServer;
-        private CaptureInterface _serverInterface;
-        public Process Process { get; set; }
 
         /// <summary>
-        /// Prepares capturing in the target process. Note that the process must not already be hooked, and must have a <see cref="Process.MainWindowHandle"/>.
+        ///     Prepares capturing in the target process. Note that the process must not already be hooked, and must have a
+        ///     <see cref="Process.MainWindowHandle" />.
         /// </summary>
         /// <param name="process">The process to inject into</param>
-        /// <exception cref="ProcessHasNoWindowHandleException">Thrown if the <paramref name="process"/> does not have a window handle. This could mean that the process does not have a UI, or that the process has not yet finished starting.</exception>
-        /// <exception cref="ProcessAlreadyHookedException">Thrown if the <paramref name="process"/> is already hooked</exception>
+        /// <exception cref="ProcessHasNoWindowHandleException">
+        ///     Thrown if the <paramref name="process" /> does not have a window
+        ///     handle. This could mean that the process does not have a UI, or that the process has not yet finished starting.
+        /// </exception>
+        /// <exception cref="ProcessAlreadyHookedException">Thrown if the <paramref name="process" /> is already hooked</exception>
         /// <exception cref="InjectionFailedException">Thrown if the injection failed - see the InnerException for more details.</exception>
         /// <remarks>The target process will have its main window brought to the foreground after successful injection.</remarks>
         public CaptureProcess(Process process, CaptureConfig config, CaptureInterface captureInterface)
@@ -51,28 +45,29 @@ namespace Capture
             }
 
             captureInterface.ProcessId = process.Id;
-            _serverInterface = captureInterface;
+            CaptureInterface = captureInterface;
             //_serverInterface = new CaptureInterface() { ProcessId = process.Id };
 
             // Initialise the IPC server (with our instance of _serverInterface)
-            _screenshotServer = RemoteHooking.IpcCreateServer<CaptureInterface>(
+            _screenshotServer = RemoteHooking.IpcCreateServer(
                 ref _channelName,
                 WellKnownObjectMode.Singleton,
-                _serverInterface);
+                CaptureInterface);
 
             try
             {
-
                 // Inject DLL into target process
                 RemoteHooking.Inject(
                     process.Id,
                     InjectionOptions.Default,
-                    typeof(CaptureInterface).Assembly.Location,//"Capture.dll", // 32-bit version (the same because AnyCPU) could use different assembly that links to 32-bit C++ helper dll
-                    typeof(CaptureInterface).Assembly.Location, //"Capture.dll", // 64-bit version (the same because AnyCPU) could use different assembly that links to 64-bit C++ helper dll
+                    typeof (CaptureInterface).Assembly.Location,
+                    //"Capture.dll", // 32-bit version (the same because AnyCPU) could use different assembly that links to 32-bit C++ helper dll
+                    typeof (CaptureInterface).Assembly.Location,
+                    //"Capture.dll", // 64-bit version (the same because AnyCPU) could use different assembly that links to 64-bit C++ helper dll
                     // the optional parameter list...
                     _channelName, // The name of the IPC channel for the injected assembly to connect to
                     config
-                );
+                    );
             }
             catch (Exception e)
             {
@@ -92,29 +87,27 @@ namespace Capture
             BringProcessWindowToFront();
         }
 
-        public CaptureInterface CaptureInterface
-        {
-            get { return _serverInterface; }
-        }
+        public Process Process { get; set; }
+
+        public CaptureInterface CaptureInterface { get; private set; }
 
         ~CaptureProcess()
         {
             Dispose(false);
         }
 
-
         #region Private methods
 
         /// <summary>
-        /// Bring the target window to the front and wait for it to be visible
+        ///     Bring the target window to the front and wait for it to be visible
         /// </summary>
         /// <remarks>If the window does not come to the front within approx. 30 seconds an exception is raised</remarks>
         public void BringProcessWindowToFront()
         {
-            if (this.Process == null)
+            if (Process == null)
                 return;
-            IntPtr handle = this.Process.MainWindowHandle;
-            int i = 0;
+            var handle = Process.MainWindowHandle;
+            var i = 0;
 
             while (!NativeMethods.IsWindowInForeground(handle))
             {
@@ -157,7 +150,8 @@ namespace Capture
 
         #region IDispose
 
-        private bool _disposed = false;
+        private bool _disposed;
+
         public void Dispose()
         {
             Dispose(true);
@@ -171,7 +165,7 @@ namespace Capture
                 if (disposing)
                 {
                     // Disconnect the IPC (which causes the remote entry point to exit)
-                    _serverInterface.Disconnect();
+                    CaptureInterface.Disconnect();
                 }
 
                 _disposed = true;

@@ -1,33 +1,30 @@
-﻿using Capture.Hook.Common;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing;
+using Capture.Hook.Common;
 using SharpDX;
 using SharpDX.Direct3D9;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
+using Font = SharpDX.Direct3D9.Font;
 
 namespace Capture.Hook.DX9
 {
     internal class DXOverlayEngine : Component
     {
-        public List<IOverlay> Overlays { get; set; }
+        private readonly Dictionary<string, Font> _fontCache = new Dictionary<string, Font>();
+        private readonly Dictionary<Element, Texture> _imageCache = new Dictionary<Element, Texture>();
 
-        bool _initialised = false;
-        bool _initialising = false;
-
-        Device _device;
-        Sprite _sprite;
-        Dictionary<string, Font> _fontCache = new Dictionary<string, Font>();
-        Dictionary<Element, Texture> _imageCache = new Dictionary<Element, Texture>();
-
-        public Device Device { get { return _device; } }
+        private bool _initialised;
+        private bool _initialising;
+        private Sprite _sprite;
 
         public DXOverlayEngine()
         {
             Overlays = new List<IOverlay>();
         }
+
+        public List<IOverlay> Overlays { get; set; }
+
+        public Device Device { get; private set; }
 
         private void EnsureInitiliased()
         {
@@ -44,10 +41,9 @@ namespace Capture.Hook.DX9
 
             try
             {
+                Device = device;
 
-                _device = device;
-
-                _sprite = new Sprite(_device);
+                _sprite = new Sprite(Device);
 
                 // Initialise any resources required for overlay elements
                 IntialiseElementResources();
@@ -88,7 +84,7 @@ namespace Capture.Hook.DX9
         }
 
         /// <summary>
-        /// Draw the overlay(s)
+        ///     Draw the overlay(s)
         /// </summary>
         public void Draw()
         {
@@ -108,15 +104,20 @@ namespace Capture.Hook.DX9
 
                     if (textElement != null)
                     {
-                        Font font = GetFontForTextElement(textElement);
-                        if (font != null && !String.IsNullOrEmpty(textElement.Text))
-                            font.DrawText(_sprite, textElement.Text, textElement.Location.X, textElement.Location.Y, new SharpDX.ColorBGRA(textElement.Color.R, textElement.Color.G, textElement.Color.B, textElement.Color.A));
+                        var font = GetFontForTextElement(textElement);
+                        if (font != null && !string.IsNullOrEmpty(textElement.Text))
+                            font.DrawText(_sprite, textElement.Text, textElement.Location.X, textElement.Location.Y,
+                                new ColorBGRA(textElement.Color.R, textElement.Color.G, textElement.Color.B,
+                                    textElement.Color.A));
                     }
                     else if (imageElement != null)
                     {
-                        Texture image = GetImageForImageElement(imageElement);
+                        var image = GetImageForImageElement(imageElement);
                         if (image != null)
-                            _sprite.Draw(image, new SharpDX.ColorBGRA(imageElement.Tint.R, imageElement.Tint.G, imageElement.Tint.B, imageElement.Tint.A), null, null, new Vector3(imageElement.Location.X, imageElement.Location.Y, 0));
+                            _sprite.Draw(image,
+                                new ColorBGRA(imageElement.Tint.R, imageElement.Tint.G, imageElement.Tint.B,
+                                    imageElement.Tint.A), null, null,
+                                new Vector3(imageElement.Location.X, imageElement.Location.Y, 0));
                     }
                 }
             }
@@ -129,35 +130,38 @@ namespace Capture.Hook.DX9
             _sprite.End();
         }
 
-        Font GetFontForTextElement(TextElement element)
+        private Font GetFontForTextElement(TextElement element)
         {
             Font result = null;
 
-            string fontKey = String.Format("{0}{1}{2}", element.Font.Name, element.Font.Size, element.Font.Style, element.AntiAliased);
+            var fontKey = string.Format("{0}{1}{2}", element.Font.Name, element.Font.Size, element.Font.Style,
+                element.AntiAliased);
 
             if (!_fontCache.TryGetValue(fontKey, out result))
             {
-                result = ToDispose(new Font(_device, new FontDescription { 
+                result = ToDispose(new Font(Device, new FontDescription
+                {
                     FaceName = element.Font.Name,
-                    Italic = (element.Font.Style & System.Drawing.FontStyle.Italic) == System.Drawing.FontStyle.Italic,
+                    Italic = (element.Font.Style & FontStyle.Italic) == FontStyle.Italic,
                     Quality = (element.AntiAliased ? FontQuality.Antialiased : FontQuality.Default),
-                    Weight = ((element.Font.Style & System.Drawing.FontStyle.Bold) == System.Drawing.FontStyle.Bold) ? FontWeight.Bold : FontWeight.Normal,
-                    Height = (int)element.Font.SizeInPoints
+                    Weight =
+                        ((element.Font.Style & FontStyle.Bold) == FontStyle.Bold) ? FontWeight.Bold : FontWeight.Normal,
+                    Height = (int) element.Font.SizeInPoints
                 }));
                 _fontCache[fontKey] = result;
             }
             return result;
         }
 
-        Texture GetImageForImageElement(ImageElement element)
+        private Texture GetImageForImageElement(ImageElement element)
         {
             Texture result = null;
 
-            if (!String.IsNullOrEmpty(element.Filename))
+            if (!string.IsNullOrEmpty(element.Filename))
             {
                 if (!_imageCache.TryGetValue(element, out result))
                 {
-                    result = ToDispose(SharpDX.Direct3D9.Texture.FromFile(_device, element.Filename));
+                    result = ToDispose(Texture.FromFile(Device, element.Filename));
 
                     _imageCache[element] = result;
                 }
@@ -166,22 +170,21 @@ namespace Capture.Hook.DX9
         }
 
         /// <summary>
-        /// Releases unmanaged and optionally managed resources
+        ///     Releases unmanaged and optionally managed resources
         /// </summary>
         /// <param name="disposing">true if disposing both unmanaged and managed</param>
         protected override void Dispose(bool disposing)
         {
             if (true)
             {
-                _device = null;
+                Device = null;
             }
         }
 
-        void SafeDispose(DisposeBase disposableObj)
+        private void SafeDispose(DisposeBase disposableObj)
         {
             if (disposableObj != null)
                 disposableObj.Dispose();
         }
-
     }
 }

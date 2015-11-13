@@ -1,21 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Remoting;
 using System.Security.Permissions;
-using System.Text;
 
 namespace Capture.Hook.Common
 {
     [Serializable]
-    public abstract class Element: MarshalByRefObject, IOverlayElement, IDisposable
+    public abstract class Element : MarshalByRefObject, IOverlayElement, IDisposable
     {
-        public virtual bool Hidden { get; set; }
-
-        ~Element()
+        public void Dispose()
         {
-            Dispose(false);
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
+
+        public virtual bool Hidden { get; set; }
 
         public virtual void Frame()
         {
@@ -26,15 +24,13 @@ namespace Capture.Hook.Common
             return MemberwiseClone();
         }
 
-
-        public void Dispose()
+        ~Element()
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
+            Dispose(false);
         }
 
         /// <summary>
-        /// Releases unmanaged and optionally managed resources
+        ///     Releases unmanaged and optionally managed resources
         /// </summary>
         /// <param name="disposing">true if disposing both unmanaged and managed</param>
         protected virtual void Dispose(bool disposing)
@@ -52,14 +48,14 @@ namespace Capture.Hook.Common
         }
 
         /// <summary>
-        /// Disconnects the remoting channel(s) of this object and all nested objects.
+        ///     Disconnects the remoting channel(s) of this object and all nested objects.
         /// </summary>
         private void Disconnect()
         {
             RemotingServices.Disconnect(this);
         }
 
-        [SecurityPermissionAttribute(SecurityAction.Demand, Flags = SecurityPermissionFlag.Infrastructure)]
+        [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.Infrastructure)]
         public override object InitializeLifetimeService()
         {
             // Returning null designates an infinite non-expiring lease.

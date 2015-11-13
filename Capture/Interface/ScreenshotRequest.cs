@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Drawing;
 using System.Runtime.Remoting;
 using System.Security.Permissions;
@@ -9,12 +6,9 @@ using System.Security.Permissions;
 namespace Capture.Interface
 {
     [Serializable]
-    public class ScreenshotRequest: MarshalByRefObject, IDisposable
+    public class ScreenshotRequest : MarshalByRefObject, IDisposable
     {
-        public Guid RequestId { get; set; }
-        public Rectangle RegionToCapture { get; set; }
-        public Size? Resize { get; set; }
-        public ImageFormat Format { get; set; }
+        private bool _disposed;
 
         public ScreenshotRequest(Rectangle region, Size resize)
             : this(Guid.NewGuid(), region, resize)
@@ -38,6 +32,17 @@ namespace Capture.Interface
             Resize = resize;
         }
 
+        public Guid RequestId { get; set; }
+        public Rectangle RegionToCapture { get; set; }
+        public Size? Resize { get; set; }
+        public ImageFormat Format { get; set; }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
         public ScreenshotRequest Clone()
         {
             return new ScreenshotRequest(RequestId, RegionToCapture, Resize)
@@ -49,13 +54,6 @@ namespace Capture.Interface
         ~ScreenshotRequest()
         {
             Dispose(false);
-        }
-
-        private bool _disposed;
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
         }
 
         protected virtual void Dispose(bool disposing)
@@ -71,14 +69,14 @@ namespace Capture.Interface
         }
 
         /// <summary>
-        /// Disconnects the remoting channel(s) of this object and all nested objects.
+        ///     Disconnects the remoting channel(s) of this object and all nested objects.
         /// </summary>
         private void Disconnect()
         {
             RemotingServices.Disconnect(this);
         }
 
-        [SecurityPermissionAttribute(SecurityAction.Demand, Flags = SecurityPermissionFlag.Infrastructure)]
+        [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.Infrastructure)]
         public override object InitializeLifetimeService()
         {
             // Returning null designates an infinite non-expiring lease.

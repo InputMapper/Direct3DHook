@@ -1,4 +1,6 @@
-﻿
+﻿using SharpDX;
+using SharpDX.Direct3D11;
+
 namespace Capture.Hook.DX11
 {
     // Copyright (c) 2013 Justin Stenning
@@ -24,17 +26,9 @@ namespace Capture.Hook.DX11
     // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
     // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
     // THE SOFTWARE.
-    using SharpDX;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-
+    
     public abstract class RendererBase : Component
     {
-        public DeviceManager DeviceManager { get; protected set; }
-        public virtual bool Show { get; set; }
         public Matrix World;
 
         public RendererBase()
@@ -43,38 +37,41 @@ namespace Capture.Hook.DX11
             Show = true;
         }
 
+        public DeviceManager DeviceManager { get; protected set; }
+        public virtual bool Show { get; set; }
+
         /// <summary>
-        /// Initialize with the provided deviceManager
+        ///     Initialize with the provided deviceManager
         /// </summary>
         /// <param name="deviceManager"></param>
         public virtual void Initialize(DeviceManager dm)
         {
-            this.DeviceManager = dm;
+            DeviceManager = dm;
 
             // The device is already initialized, create
             // any device resources immediately.
-            if (this.DeviceManager.Direct3DDevice != null)
+            if (DeviceManager.Direct3DDevice != null)
             {
                 CreateDeviceDependentResources();
             }
         }
 
         /// <summary>
-        /// Create any resources that depend on the device or device context
+        ///     Create any resources that depend on the device or device context
         /// </summary>
         protected virtual void CreateDeviceDependentResources()
         {
         }
 
         /// <summary>
-        /// Create any resources that depend upon the size of the render target
+        ///     Create any resources that depend upon the size of the render target
         /// </summary>
         protected virtual void CreateSizeDependentResources()
         {
         }
 
         /// <summary>
-        /// Render a frame
+        ///     Render a frame
         /// </summary>
         public void Render()
         {
@@ -83,20 +80,19 @@ namespace Capture.Hook.DX11
         }
 
         /// <summary>
-        /// Each descendant of RendererBase performs a frame
-        /// render within the implementation of DoRender
+        ///     Each descendant of RendererBase performs a frame
+        ///     render within the implementation of DoRender
         /// </summary>
         protected abstract void DoRender();
 
-        public void Render(SharpDX.Direct3D11.DeviceContext context)
+        public void Render(DeviceContext context)
         {
             if (Show)
                 DoRender(context);
         }
 
-        protected virtual void DoRender(SharpDX.Direct3D11.DeviceContext context)
+        protected virtual void DoRender(DeviceContext context)
         {
-
         }
     }
 }

@@ -1,39 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Capture.Hook.Common;
-using SharpDX.Direct3D11;
-using SharpDX;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
+using Capture.Hook.Common;
+using SharpDX;
+using SharpDX.Direct3D11;
+using SharpDX.DXGI;
+using Device = SharpDX.Direct3D11.Device;
 
 namespace Capture.Hook.DX11
 {
-    internal class DXOverlayEngine: Component
+    internal class DXOverlayEngine : Component
     {
-        public List<IOverlay> Overlays { get; set; }
-        public bool DeferredContext
-        {
-            get
-            {
-                return _deviceContext.TypeInfo == DeviceContextType.Deferred;
-            }
-        }
+        private Device _device;
+        private DeviceContext _deviceContext;
+        private readonly Dictionary<string, DXFont> _fontCache = new Dictionary<string, DXFont>();
+        private readonly Dictionary<Element, DXImage> _imageCache = new Dictionary<Element, DXImage>();
 
-        bool _initialised = false;
-        bool _initialising = false;
-
-        Device _device;
-        DeviceContext _deviceContext;
-        Texture2D _renderTarget;
-        RenderTargetView _renderTargetView;
-        DXSprite _spriteEngine;
-        Dictionary<string, DXFont> _fontCache = new Dictionary<string, DXFont>();
-        Dictionary<Element, DXImage> _imageCache = new Dictionary<Element, DXImage>();
+        private bool _initialised;
+        private bool _initialising;
+        private Texture2D _renderTarget;
+        private RenderTargetView _renderTargetView;
+        private DXSprite _spriteEngine;
 
         public DXOverlayEngine()
         {
             Overlays = new List<IOverlay>();
+        }
+
+        public List<IOverlay> Overlays { get; set; }
+
+        public bool DeferredContext
+        {
+            get { return _deviceContext.TypeInfo == DeviceContextType.Deferred; }
         }
 
         private void EnsureInitiliased()
@@ -41,7 +38,7 @@ namespace Capture.Hook.DX11
             Debug.Assert(_initialised);
         }
 
-        public bool Initialise(SharpDX.DXGI.SwapChain swapChain)
+        public bool Initialise(SwapChain swapChain)
         {
             return Initialise(swapChain.GetDevice<Device>(), swapChain.GetBackBuffer<Texture2D>(0));
         }
@@ -53,10 +50,9 @@ namespace Capture.Hook.DX11
                 return false;
 
             _initialising = true;
-            
+
             try
             {
-
                 _device = device;
                 _renderTarget = renderTarget;
                 try
@@ -118,14 +114,17 @@ namespace Capture.Hook.DX11
         {
             //if (!DeferredContext)
             //{
-                ViewportF[] viewportf = { new ViewportF(0, 0, _renderTarget.Description.Width, _renderTarget.Description.Height, 0, 1) };
-                _deviceContext.Rasterizer.SetViewports(viewportf);
-                _deviceContext.OutputMerger.SetTargets(_renderTargetView);
+            ViewportF[] viewportf =
+            {
+                new ViewportF(0, 0, _renderTarget.Description.Width, _renderTarget.Description.Height, 0, 1)
+            };
+            _deviceContext.Rasterizer.SetViewports(viewportf);
+            _deviceContext.OutputMerger.SetTargets(_renderTargetView);
             //}
         }
 
         /// <summary>
-        /// Draw the overlay(s)
+        ///     Draw the overlay(s)
         /// </summary>
         public void Draw()
         {
@@ -145,15 +144,17 @@ namespace Capture.Hook.DX11
 
                     if (textElement != null)
                     {
-                        DXFont font = GetFontForTextElement(textElement);
-                        if (font != null && !String.IsNullOrEmpty(textElement.Text))
-                            _spriteEngine.DrawString(textElement.Location.X, textElement.Location.Y, textElement.Text, textElement.Color, font);
+                        var font = GetFontForTextElement(textElement);
+                        if (font != null && !string.IsNullOrEmpty(textElement.Text))
+                            _spriteEngine.DrawString(textElement.Location.X, textElement.Location.Y, textElement.Text,
+                                textElement.Color, font);
                     }
                     else if (imageElement != null)
                     {
-                        DXImage image = GetImageForImageElement(imageElement);
+                        var image = GetImageForImageElement(imageElement);
                         if (image != null)
-                            _spriteEngine.DrawImage(imageElement.Location.X, imageElement.Location.Y, imageElement.Scale, imageElement.Angle, imageElement.Tint, image);
+                            _spriteEngine.DrawImage(imageElement.Location.X, imageElement.Location.Y, imageElement.Scale,
+                                imageElement.Angle, imageElement.Tint, image);
                     }
                 }
             }
@@ -171,11 +172,12 @@ namespace Capture.Hook.DX11
             }
         }
 
-        DXFont GetFontForTextElement(TextElement element)
+        private DXFont GetFontForTextElement(TextElement element)
         {
             DXFont result = null;
 
-            string fontKey = String.Format("{0}{1}{2}", element.Font.Name, element.Font.Size, element.Font.Style, element.AntiAliased);
+            var fontKey = string.Format("{0}{1}{2}", element.Font.Name, element.Font.Size, element.Font.Style,
+                element.AntiAliased);
 
             if (!_fontCache.TryGetValue(fontKey, out result))
             {
@@ -186,7 +188,7 @@ namespace Capture.Hook.DX11
             return result;
         }
 
-        DXImage GetImageForImageElement(ImageElement element)
+        private DXImage GetImageForImageElement(ImageElement element)
         {
             DXImage result = null;
 
@@ -201,7 +203,7 @@ namespace Capture.Hook.DX11
         }
 
         /// <summary>
-        /// Releases unmanaged and optionally managed resources
+        ///     Releases unmanaged and optionally managed resources
         /// </summary>
         /// <param name="disposing">true if disposing both unmanaged and managed</param>
         protected override void Dispose(bool disposing)
@@ -212,7 +214,7 @@ namespace Capture.Hook.DX11
             }
         }
 
-        void SafeDispose(DisposeBase disposableObj)
+        private void SafeDispose(DisposeBase disposableObj)
         {
             if (disposableObj != null)
                 disposableObj.Dispose();
