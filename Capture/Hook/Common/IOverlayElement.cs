@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Capture.Hook.Common
+namespace Direct3DHookLib.Hook.Common
 {
     public interface IOverlayElement : ICloneable
     {

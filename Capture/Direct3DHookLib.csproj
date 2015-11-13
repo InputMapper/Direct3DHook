@@ -8,8 +8,8 @@
     <ProjectGuid>{23178A3D-2AC0-419A-B1B6-59CA45191270}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Capture</RootNamespace>
-    <AssemblyName>Capture</AssemblyName>
+    <RootNamespace>Direct3DHookLib</RootNamespace>
+    <AssemblyName>Direct3DHookLib</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>

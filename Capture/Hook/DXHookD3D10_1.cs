@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
-using Capture.Interface;
+using Direct3DHookLib.Interface;
 using SharpDX;
 using SharpDX.Direct3D10;
 using SharpDX.DXGI;
@@ -12,7 +12,7 @@ using Device1 = SharpDX.Direct3D10.Device1;
 using Rectangle = System.Drawing.Rectangle;
 using Resource = SharpDX.Direct3D10.Resource;
 
-namespace Capture.Hook
+namespace Direct3DHookLib.Hook
 {
     internal enum D3D10_1DeviceVTbl : short
     {

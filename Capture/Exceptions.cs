@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Capture
+namespace Direct3DHookLib
 {
     /// <summary>
     ///     Indicates that the provided process does not have a window handle.

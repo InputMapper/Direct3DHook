@@ -4,9 +4,9 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Capture.Hook.Common;
-using Capture.Hook.DX9;
-using Capture.Interface;
+using Direct3DHookLib.Hook.Common;
+using Direct3DHookLib.Hook.DX9;
+using Direct3DHookLib.Interface;
 using SharpDX;
 using SharpDX.Direct3D9;
 using Color = System.Drawing.Color;
@@ -15,7 +15,7 @@ using Point = System.Drawing.Point;
 using Rectangle = SharpDX.Rectangle;
 //using SlimDX.Direct3D9;
 
-namespace Capture.Hook
+namespace Direct3DHookLib.Hook
 {
     internal class DXHookD3D9 : BaseDXHook
     {

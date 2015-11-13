@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Capture.Hook.Common
+namespace Direct3DHookLib.Hook.Common
 {
     public class Overlay : IOverlay
     {

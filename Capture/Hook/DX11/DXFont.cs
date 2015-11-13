@@ -15,7 +15,7 @@ using Color = System.Drawing.Color;
 using Device = SharpDX.Direct3D11.Device;
 using Rectangle = SharpDX.Rectangle;
 
-namespace Capture.Hook.DX11
+namespace Direct3DHookLib.Hook.DX11
 {
     public class DXFont : IDisposable
     {

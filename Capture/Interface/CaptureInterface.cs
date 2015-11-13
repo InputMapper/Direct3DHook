@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Threading;
 
-namespace Capture.Interface
+namespace Direct3DHookLib.Interface
 {
     [Serializable]
     public delegate void RecordingStartedEvent(CaptureConfig config);

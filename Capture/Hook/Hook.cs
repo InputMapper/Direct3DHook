@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using EasyHook;
 
-namespace Capture.Hook
+namespace Direct3DHookLib.Hook
 {
     // Thanks to remcoros for the initial version of the following helper classes
 

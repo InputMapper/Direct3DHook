@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Capture.Hook
+namespace Direct3DHookLib.Hook
 {
     public class TextDisplay
     {

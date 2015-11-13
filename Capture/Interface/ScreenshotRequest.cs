@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Runtime.Remoting;
 using System.Security.Permissions;
 
-namespace Capture.Interface
+namespace Direct3DHookLib.Interface
 {
     [Serializable]
     public class ScreenshotRequest : MarshalByRefObject, IDisposable

@@ -1,7 +1,7 @@
 ﻿using System;
-using Capture.Interface;
+using Direct3DHookLib.Interface;
 
-namespace Capture.Hook
+namespace Direct3DHookLib.Hook
 {
     internal interface IDXHook : IDisposable
     {

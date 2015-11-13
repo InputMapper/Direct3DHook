@@ -5,9 +5,9 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
-using Capture.Hook.Common;
-using Capture.Hook.DX11;
-using Capture.Interface;
+using Direct3DHookLib.Hook.Common;
+using Direct3DHookLib.Hook.DX11;
+using Direct3DHookLib.Interface;
 using SharpDX;
 using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
@@ -15,13 +15,13 @@ using SharpDX.DXGI;
 using SharpDX.Windows;
 using Color = System.Drawing.Color;
 using Device = SharpDX.Direct3D11.Device;
-using ImageFormat = Capture.Interface.ImageFormat;
+using ImageFormat = Direct3DHookLib.Interface.ImageFormat;
 using MapFlags = SharpDX.Direct3D11.MapFlags;
 using Point = System.Drawing.Point;
 using Rectangle = SharpDX.Rectangle;
 using Resource = SharpDX.DXGI.Resource;
 
-namespace Capture.Hook
+namespace Direct3DHookLib.Hook
 {
     internal enum D3D11DeviceVTbl : short
     {

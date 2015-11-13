@@ -13,9 +13,9 @@ using System.Runtime.Remoting.Channels.Ipc;
 using System.Runtime.Remoting;
 using System.Runtime.InteropServices;
 using System.IO;
-using Capture.Interface;
-using Capture.Hook;
-using Capture;
+using Direct3DHookLib.Interface;
+using Direct3DHookLib.Hook;
+using Direct3DHookLib;
 
 namespace TestScreenshot
 {

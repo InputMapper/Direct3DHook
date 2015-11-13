@@ -7,11 +7,11 @@ using System.Runtime.Remoting.Channels.Ipc;
 using System.Runtime.Serialization.Formatters;
 using System.Threading;
 using System.Threading.Tasks;
-using Capture.Hook;
-using Capture.Interface;
+using Direct3DHookLib.Hook;
+using Direct3DHookLib.Interface;
 using EasyHook;
 
-namespace Capture
+namespace Direct3DHookLib
 {
     public class EntryPoint : IEntryPoint
     {

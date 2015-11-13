@@ -1,4 +1,4 @@
-﻿namespace Capture.Interface
+﻿namespace Direct3DHookLib.Interface
 {
     public enum ImageFormat
     {

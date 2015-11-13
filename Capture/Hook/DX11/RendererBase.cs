@@ -1,7 +1,7 @@
 ﻿using SharpDX;
 using SharpDX.Direct3D11;
 
-namespace Capture.Hook.DX11
+namespace Direct3DHookLib.Hook.DX11
 {
     // Copyright (c) 2013 Justin Stenning
     // Adapted from original code by Alexandre Mutel

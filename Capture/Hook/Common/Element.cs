@@ -2,7 +2,7 @@
 using System.Runtime.Remoting;
 using System.Security.Permissions;
 
-namespace Capture.Hook.Common
+namespace Direct3DHookLib.Hook.Common
 {
     [Serializable]
     public abstract class Element : MarshalByRefObject, IOverlayElement, IDisposable

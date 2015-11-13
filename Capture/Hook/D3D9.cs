@@ -1,4 +1,4 @@
-﻿namespace Capture.Hook
+﻿namespace Direct3DHookLib.Hook
 {
     /// <summary>
     ///     The full list of IDirect3DDevice9 functions with the correct index

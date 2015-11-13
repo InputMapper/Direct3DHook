@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
-using Capture.Hook.Common;
+using Direct3DHookLib.Hook.Common;
+using Direct3DHookLib.Hook.Common;
 using SharpDX;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using Device = SharpDX.Direct3D11.Device;
 
-namespace Capture.Hook.DX11
+namespace Direct3DHookLib.Hook.DX11
 {
     internal class DXOverlayEngine : Component
     {

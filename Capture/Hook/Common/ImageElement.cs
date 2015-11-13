@@ -1,6 +1,7 @@
 ﻿using System.Drawing;
+using Direct3DHookLib.Hook.Common;
 
-namespace Capture.Hook.Common
+namespace Direct3DHookLib.Hook.Common
 {
     public class ImageElement : Element
     {

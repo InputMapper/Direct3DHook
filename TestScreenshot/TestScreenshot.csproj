@@ -130,9 +130,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Capture\Capture.csproj">
+    <ProjectReference Include="..\Capture\Direct3DHookLib.csproj">
       <Project>{23178A3D-2AC0-419A-B1B6-59CA45191270}</Project>
-      <Name>Capture</Name>
+      <Name>Direct3DHookLib</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

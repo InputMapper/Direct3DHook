@@ -1,7 +1,7 @@
 ﻿using System.Drawing.Imaging;
 using SharpDX.Direct3D9;
 
-namespace Capture.Hook
+namespace Direct3DHookLib.Hook
 {
     public static class DX9FormatExtension
     {

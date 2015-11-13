@@ -4,7 +4,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
-using Capture.Interface;
+using Direct3DHookLib.Interface;
 using SharpDX;
 using SharpDX.Direct3D10;
 using SharpDX.DXGI;
@@ -16,7 +16,7 @@ using Resource = SharpDX.Direct3D10.Resource;
 //using SlimDX;
 //using Device = SlimDX.Direct3D10.Device;
 
-namespace Capture.Hook
+namespace Direct3DHookLib.Hook
 {
     internal enum D3D10DeviceVTbl : short
     {

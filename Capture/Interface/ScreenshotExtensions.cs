@@ -3,7 +3,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
 
-namespace Capture.Interface
+namespace Direct3DHookLib.Interface
 {
     public static class ScreenshotExtensions
     {

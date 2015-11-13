@@ -8,7 +8,7 @@ using SharpDX.DXGI;
 using Device = SharpDX.Direct3D11.Device;
 using Rectangle = System.Drawing.Rectangle;
 
-namespace Capture.Hook.DX11
+namespace Direct3DHookLib.Hook.DX11
 {
     public class DXImage : Component
     {

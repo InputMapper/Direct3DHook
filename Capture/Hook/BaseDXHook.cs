@@ -8,12 +8,12 @@ using System.Runtime.InteropServices;
 using System.Runtime.Remoting;
 using System.Threading;
 using System.Threading.Tasks;
-using Capture.Interface;
+using Direct3DHookLib.Interface;
 using EasyHook;
 using SharpDX;
 using ImageFormat = System.Drawing.Imaging.ImageFormat;
 
-namespace Capture.Hook
+namespace Direct3DHookLib.Hook
 {
     internal abstract class BaseDXHook : Component, IDXHook
     {
@@ -198,7 +198,7 @@ namespace Capture.Hook
             // Prepare the response
             Screenshot response = null;
 
-            if (request.Format == Capture.Interface.ImageFormat.PixelData)
+            if (request.Format == Direct3DHookLib.Interface.ImageFormat.PixelData)
             {
                 // Return the raw data
                 response = new Screenshot(request.RequestId, data)
@@ -218,10 +218,10 @@ namespace Capture.Hook
                     var imgFormat = ImageFormat.Bmp;
                     switch (request.Format)
                     {
-                        case Capture.Interface.ImageFormat.Jpeg:
+                        case Direct3DHookLib.Interface.ImageFormat.Jpeg:
                             imgFormat = ImageFormat.Jpeg;
                             break;
-                        case Capture.Interface.ImageFormat.Png:
+                        case Direct3DHookLib.Interface.ImageFormat.Png:
                             imgFormat = ImageFormat.Png;
                             break;
                     }

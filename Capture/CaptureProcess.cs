@@ -3,11 +3,11 @@ using System.Diagnostics;
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels.Ipc;
 using System.Threading;
-using Capture.Hook;
-using Capture.Interface;
+using Direct3DHookLib.Hook;
+using Direct3DHookLib.Interface;
 using EasyHook;
 
-namespace Capture
+namespace Direct3DHookLib
 {
     public class CaptureProcess : IDisposable
     {

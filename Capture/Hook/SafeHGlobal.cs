@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace Capture.Hook
+namespace Direct3DHookLib.Hook
 {
     /// <summary>
     ///     Provides a safe handle around a block of unmanaged memory.

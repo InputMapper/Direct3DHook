@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using EasyHook;
 
-namespace Capture.Hook
+namespace Direct3DHookLib.Hook
 {
     public class HookManager
     {

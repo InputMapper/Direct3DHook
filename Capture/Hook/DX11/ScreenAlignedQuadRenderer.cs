@@ -3,7 +3,7 @@ using SharpDX.D3DCompiler;
 using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
 
-namespace Capture.Hook.DX11
+namespace Direct3DHookLib.Hook.DX11
 {
     // Resolve class name conflicts by explicitly stating
     // which class they refer to:

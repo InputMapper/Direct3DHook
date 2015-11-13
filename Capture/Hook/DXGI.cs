@@ -1,7 +1,7 @@
 ﻿using System;
 using SharpDX.DXGI;
 
-namespace Capture.Hook
+namespace Direct3DHookLib.Hook
 {
     internal static class DXGI
     {

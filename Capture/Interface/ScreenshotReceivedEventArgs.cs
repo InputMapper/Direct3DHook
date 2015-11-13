@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Capture.Interface
+namespace Direct3DHookLib.Interface
 {
     [Serializable]
     public class ScreenshotReceivedEventArgs : MarshalByRefObject

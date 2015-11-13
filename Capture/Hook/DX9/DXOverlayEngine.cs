@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-using Capture.Hook.Common;
+using Direct3DHookLib.Hook.Common;
+using Direct3DHookLib.Hook.Common;
 using SharpDX;
 using SharpDX.Direct3D9;
 using Font = SharpDX.Direct3D9.Font;
 
-namespace Capture.Hook.DX9
+namespace Direct3DHookLib.Hook.DX9
 {
     internal class DXOverlayEngine : Component
     {

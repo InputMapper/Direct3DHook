@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Drawing;
 
-namespace Capture.Hook.Common
+namespace Direct3DHookLib.Hook.Common
 {
     public class FramesPerSecond : TextElement
     {

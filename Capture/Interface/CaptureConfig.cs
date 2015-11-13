@@ -2,7 +2,7 @@
 using System.IO;
 using System.Reflection;
 
-namespace Capture.Interface
+namespace Direct3DHookLib.Interface
 {
     [Serializable]
     public class CaptureConfig
