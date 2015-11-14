@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using Direct3DHookLib.Hook.Common;
 using Direct3DHookLib.Hook.Common;
 using SharpDX;
@@ -167,6 +169,22 @@ namespace Direct3DHookLib.Hook.DX9
                     _imageCache[element] = result;
                 }
             }
+            else
+            {
+                if (!_imageCache.TryGetValue(element, out result) && element.Bitmap != null)
+                {
+                    using (var ms = new MemoryStream())
+                    {
+                        // TODO: hard-coded target format problematic?
+                        element.Bitmap.Save(ms, ImageFormat.Png);
+                        ms.Seek(0, SeekOrigin.Begin);
+                        result = ToDispose(Texture.FromStream(Device, ms));
+                    }
+
+                    _imageCache[element] = result;
+                }
+            }
+
             return result;
         }
 

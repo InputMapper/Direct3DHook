@@ -409,6 +409,9 @@ namespace Direct3DHookLib.Hook
                         if (_overlayEngine != null)
                             _overlayEngine.Dispose();
 
+                        var battery = new Bitmap(@"D:\Temp\battery_discharging_080.png");
+                        battery.RotateFlip(RotateFlipType.Rotate90FlipNone);
+                        
                         _overlayEngine = ToDispose(new DXOverlayEngine());
                         // Create Overlay
                         _overlayEngine.Overlays.Add(new Overlay
@@ -416,14 +419,19 @@ namespace Direct3DHookLib.Hook
                             Elements =
                             {
                                 // Add frame rate
-                                new Common.FramesPerSecond(new System.Drawing.Font("Arial", 16, FontStyle.Bold))
+                                new TextElement(new System.Drawing.Font("Arial", 16, FontStyle.Bold))
                                 {
-                                    Location = new Point(5, 5),
+                                    Location = new Point(25, 25),
                                     Color = Color.Red,
-                                    AntiAliased = true
-                                }
+                                    AntiAliased = true,
+                                    Text = "Controller #1: DualShock 3"
+                                },
                                 // Example of adding an image to overlay (can implement semi transparency with Tint, e.g. Ting = Color.FromArgb(127, 255, 255, 255))
-                                //new Capture.Hook.Common.ImageElement(@"C:\Temp\test.bmp") { Location = new System.Drawing.Point(20, 20) }
+                                new ImageElement(battery)
+                                {
+                                    Location = new System.Drawing.Point(200, 5),
+                                    Tint = Color.FromArgb(127, 255, 255, 255)
+                                }
                             }
                         });
 
