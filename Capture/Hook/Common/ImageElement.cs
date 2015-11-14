@@ -1,5 +1,4 @@
 ﻿using System.Drawing;
-using Direct3DHookLib.Hook.Common;
 
 namespace Direct3DHookLib.Hook.Common
 {

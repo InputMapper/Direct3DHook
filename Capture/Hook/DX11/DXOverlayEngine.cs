@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using Direct3DHookLib.Hook.Common;
-using Direct3DHookLib.Hook.Common;
 using SharpDX;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
@@ -11,10 +10,10 @@ namespace Direct3DHookLib.Hook.DX11
 {
     internal class DXOverlayEngine : Component
     {
-        private Device _device;
-        private DeviceContext _deviceContext;
         private readonly Dictionary<string, DXFont> _fontCache = new Dictionary<string, DXFont>();
         private readonly Dictionary<Element, DXImage> _imageCache = new Dictionary<Element, DXImage>();
+        private Device _device;
+        private DeviceContext _deviceContext;
 
         private bool _initialised;
         private bool _initialising;
