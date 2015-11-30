@@ -409,7 +409,7 @@ namespace Direct3DHookLib.Hook
                         if (_overlayEngine != null)
                             _overlayEngine.Dispose();
 
-                        var battery = new Bitmap(@"D:\Temp\battery_discharging_080.png");
+                        var battery = new Bitmap(@"D:\Temp\Battery\battery_discharging_080.png");
                         battery.RotateFlip(RotateFlipType.Rotate90FlipNone);
                         
                         _overlayEngine = ToDispose(new DXOverlayEngine());
