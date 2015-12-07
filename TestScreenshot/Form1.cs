@@ -262,14 +262,20 @@ namespace TestScreenshot
 
         private void btnDrawOverlay_Click(object sender, EventArgs e)
         {
-            _captureProcess.CaptureInterface.DrawOverlayInGame(new List<IOverlayElement>()
+            _captureProcess.CaptureInterface.DrawOverlayInGame(new List<IOverlayElement>
             {
-                new TextElement(new Font(FontFamily.GenericSansSerif, 12))
+                new TextElement(new Font("Arial", 16, FontStyle.Bold))
                 {
-                    AntiAliased = true,
+                    Location = new Point(25, 25),
                     Color = Color.Red,
-                    Location = new Point(20, 20),
-                    Text = "TEST"
+                    AntiAliased = true,
+                    Text = "Controller #1: DualShock 3"
+                },
+                // Example of adding an image to overlay (can implement semi transparency with Tint, e.g. Ting = Color.FromArgb(127, 255, 255, 255))
+                new ImageElement(@"D:\Temp\Battery\battery_discharging_080.png")
+                {
+                    Location = new Point(200, 5),
+                    Tint = Color.FromArgb(127, 255, 255, 255)
                 }
             });
         }
