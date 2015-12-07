@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -6,6 +7,7 @@ using System.Threading;
 using System.Windows.Forms;
 using Direct3DHookLib;
 using Direct3DHookLib.Hook;
+using Direct3DHookLib.Hook.Common;
 using Direct3DHookLib.Interface;
 using EasyHook;
 
@@ -256,6 +258,20 @@ namespace TestScreenshot
                 catch
                 {
                 }
+        }
+
+        private void btnDrawOverlay_Click(object sender, EventArgs e)
+        {
+            _captureProcess.CaptureInterface.DrawOverlayInGame(new List<IOverlayElement>()
+            {
+                new TextElement(new Font(FontFamily.GenericSansSerif, 12))
+                {
+                    AntiAliased = true,
+                    Color = Color.Red,
+                    Location = new Point(20, 20),
+                    Text = "TEST"
+                }
+            });
         }
     }
 }

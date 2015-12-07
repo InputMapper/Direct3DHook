@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.Remoting;
 using System.Threading;
 using System.Threading.Tasks;
+using Direct3DHookLib.Hook.Common;
 using Direct3DHookLib.Interface;
 using EasyHook;
 using SharpDX;
@@ -27,11 +28,16 @@ namespace Direct3DHookLib.Hook
             Timer = new Stopwatch();
             Timer.Start();
             FPS = new FramesPerSecond();
+            OverlayElements = new List<IOverlayElement>();
 
             Interface.ScreenshotRequested += InterfaceEventProxy.ScreenshotRequestedProxyHandler;
             Interface.DisplayText += InterfaceEventProxy.DisplayTextProxyHandler;
+            Interface.DrawOverlay += InterfaceEventProxy.DrawOverlayProxyHandler;
+
             InterfaceEventProxy.ScreenshotRequested += InterfaceEventProxy_ScreenshotRequested;
             InterfaceEventProxy.DisplayText += InterfaceEventProxy_DisplayText;
+            InterfaceEventProxy.DrawOverlay += InterfaceEventProxy_DrawOverlay;
+
         }
 
         protected Stopwatch Timer { get; set; }
@@ -42,6 +48,10 @@ namespace Direct3DHookLib.Hook
         protected FramesPerSecond FPS { get; set; }
 
         protected TextDisplay TextDisplay { get; set; }
+
+        protected List<IOverlayElement> OverlayElements { get; set; }
+
+        protected bool IsOverlayUpdatePending { get; set; }
 
         protected int ProcessId
         {
@@ -81,6 +91,12 @@ namespace Direct3DHookLib.Hook
                 Text = args.Text,
                 Duration = args.Duration
             };
+        }
+
+        private void InterfaceEventProxy_DrawOverlay(DrawOverlayEventArgs args)
+        {
+            OverlayElements = args.OverlayElements;
+            IsOverlayUpdatePending = args.IsUpdatePending;
         }
 
         protected virtual void InterfaceEventProxy_ScreenshotRequested(ScreenshotRequest request)

@@ -520,7 +520,9 @@ namespace Direct3DHookLib.Hook
                 if (Config.ShowOverlay)
                 {
                     // Initialise Overlay Engine
-                    if (_swapChainPointer != swapChain.NativePointer || _overlayEngine == null)
+                    if (_swapChainPointer != swapChain.NativePointer 
+                        || _overlayEngine == null
+                        || IsOverlayUpdatePending)
                     {
                         if (_overlayEngine != null)
                             _overlayEngine.Dispose();
@@ -528,17 +530,7 @@ namespace Direct3DHookLib.Hook
                         _overlayEngine = new DXOverlayEngine();
                         _overlayEngine.Overlays.Add(new Overlay
                         {
-                            Elements =
-                            {
-                                //new Capture.Hook.Common.TextElement(new System.Drawing.Font("Times New Roman", 22)) { Text = "Test", Location = new System.Drawing.Point(200, 200), Color = System.Drawing.Color.Yellow, AntiAliased = false},
-                                new Common.FramesPerSecond(new Font("Arial", 16))
-                                {
-                                    Location = new Point(5, 5),
-                                    Color = Color.Red,
-                                    AntiAliased = true
-                                }
-                                //new Capture.Hook.Common.ImageElement(@"C:\Temp\test.bmp") { Location = new System.Drawing.Point(20, 20) }
-                            }
+                            Elements = OverlayElements
                         });
                         _overlayEngine.Initialise(swapChain);
 

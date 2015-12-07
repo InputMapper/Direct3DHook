@@ -11,6 +11,13 @@ using SharpDX;
 using SharpDX.Direct3D9;
 using Color = System.Drawing.Color;
 using Font = SharpDX.Direct3D9.Font;
+using FontCharacterSet = SharpDX.Direct3D10.FontCharacterSet;
+using FontDescription = SharpDX.Direct3D10.FontDescription;
+using FontDrawFlags = SharpDX.Direct3D10.FontDrawFlags;
+using FontPitchAndFamily = SharpDX.Direct3D10.FontPitchAndFamily;
+using FontPrecision = SharpDX.Direct3D10.FontPrecision;
+using FontQuality = SharpDX.Direct3D10.FontQuality;
+using FontWeight = SharpDX.Direct3D10.FontWeight;
 using Point = System.Drawing.Point;
 using Rectangle = SharpDX.Rectangle;
 //using SlimDX.Direct3D9;
@@ -403,39 +410,25 @@ namespace Direct3DHookLib.Hook
                     #region Draw Overlay
 
                     // Check if overlay needs to be initialised
-                    if (_overlayEngine == null || _overlayEngine.Device.NativePointer != device.NativePointer)
+                    if (_overlayEngine == null 
+                        || _overlayEngine.Device.NativePointer != device.NativePointer 
+                        || IsOverlayUpdatePending)
                     {
                         // Cleanup if necessary
                         if (_overlayEngine != null)
                             _overlayEngine.Dispose();
 
-                        var battery = new Bitmap(@"D:\Temp\Battery\battery_discharging_080.png");
-                        battery.RotateFlip(RotateFlipType.Rotate90FlipNone);
-                        
                         _overlayEngine = ToDispose(new DXOverlayEngine());
+
                         // Create Overlay
                         _overlayEngine.Overlays.Add(new Overlay
                         {
-                            Elements =
-                            {
-                                // Add frame rate
-                                new TextElement(new System.Drawing.Font("Arial", 16, FontStyle.Bold))
-                                {
-                                    Location = new Point(25, 25),
-                                    Color = Color.Red,
-                                    AntiAliased = true,
-                                    Text = "Controller #1: DualShock 3"
-                                },
-                                // Example of adding an image to overlay (can implement semi transparency with Tint, e.g. Ting = Color.FromArgb(127, 255, 255, 255))
-                                new ImageElement(battery)
-                                {
-                                    Location = new System.Drawing.Point(200, 5),
-                                    Tint = Color.FromArgb(127, 255, 255, 255)
-                                }
-                            }
+                            Elements = OverlayElements
                         });
 
                         _overlayEngine.Initialise(device);
+
+                        IsOverlayUpdatePending = false;
                     }
                     // Draw Overlay(s)
                     else if (_overlayEngine != null)
@@ -452,6 +445,12 @@ namespace Direct3DHookLib.Hook
             {
                 DebugMessage(e.ToString());
             }
+        }
+
+        private void DrawText(Font font, Vector2 pos, string text, ColorBGRA color)
+        {
+            font.DrawText(null, text, new Rectangle((int) pos.X, (int) pos.Y, 0, 0),
+                SharpDX.Direct3D9.FontDrawFlags.NoClip, color);
         }
 
         private DataRectangle LockRenderTarget(Surface _renderTargetCopy, out Rectangle rect)

@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Threading;
+using Direct3DHookLib.Hook.Common;
 
 namespace Direct3DHookLib.Interface
 {
@@ -24,6 +26,9 @@ namespace Direct3DHookLib.Interface
 
     [Serializable]
     public delegate void DisplayTextEvent(DisplayTextEventArgs args);
+
+    [Serializable]
+    public delegate void DrawOverlayEvent(DrawOverlayEventArgs args);
 
     [Serializable]
     public class CaptureInterface : MarshalByRefObject
@@ -84,6 +89,11 @@ namespace Direct3DHookLib.Interface
         ///     Client event used to display a piece of text in-game
         /// </summary>
         public event DisplayTextEvent DisplayText;
+
+        /// <summary>
+        ///     Client event used to (re-)draw an overlay in-game.
+        /// </summary>
+        public event DrawOverlayEvent DrawOverlay;
 
         #endregion
 
@@ -246,6 +256,15 @@ namespace Direct3DHookLib.Interface
             if (duration.TotalMilliseconds <= 0)
                 throw new ArgumentException("Duration must be larger than 0", "duration");
             SafeInvokeDisplayText(new DisplayTextEventArgs(text, duration));
+        }
+
+        public void DrawOverlayInGame(List<IOverlayElement> elements)
+        {
+            SafeInvokeDrawOverlay(new DrawOverlayEventArgs()
+            {
+                IsUpdatePending = true,
+                OverlayElements = elements
+            });
         }
 
         #endregion
@@ -420,6 +439,30 @@ namespace Direct3DHookLib.Interface
             }
         }
 
+        private void SafeInvokeDrawOverlay(DrawOverlayEventArgs drawOverlayEventArgs)
+        {
+            if (DrawOverlay == null)
+                return; //No Listeners
+
+            DrawOverlayEvent listener = null;
+            var dels = DrawOverlay.GetInvocationList();
+
+            foreach (var del in dels)
+            {
+                try
+                {
+                    listener = (DrawOverlayEvent)del;
+                    listener.Invoke(drawOverlayEventArgs);
+                }
+                catch (Exception)
+                {
+                    //Could not reach the destination, so remove it
+                    //from the list
+                    DrawOverlay -= listener;
+                }
+            }
+        }
+
         #endregion
     }
 
@@ -471,6 +514,12 @@ namespace Direct3DHookLib.Interface
                 DisplayText(args);
         }
 
+        public void DrawOverlayProxyHandler(DrawOverlayEventArgs args)
+        {
+            if (DrawOverlay != null)
+                DrawOverlay(args);
+        }
+
         #region Event Declarations
 
         /// <summary>
@@ -497,6 +546,8 @@ namespace Direct3DHookLib.Interface
         ///     Client event used to display in-game text
         /// </summary>
         public event DisplayTextEvent DisplayText;
+
+        public event DrawOverlayEvent DrawOverlay;
 
         #endregion
     }
