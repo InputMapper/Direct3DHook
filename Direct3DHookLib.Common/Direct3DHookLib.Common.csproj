@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D48B4F51-634B-42CB-ACE5-01DD1E864C76}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Direct3DHookLib.Common</RootNamespace>
+    <AssemblyName>Direct3DHookLib.Common</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Hook\BaseDXHook.cs" />
+    <Compile Include="Hook\Common\Element.cs" />
+    <Compile Include="Hook\Common\FramesPerSecond.cs" />
+    <Compile Include="Hook\Common\ImageElement.cs" />
+    <Compile Include="Hook\Common\IOverlay.cs" />
+    <Compile Include="Hook\Common\IOverlayElement.cs" />
+    <Compile Include="Hook\Common\Overlay.cs" />
+    <Compile Include="Hook\Common\TextElement.cs" />
+    <Compile Include="Hook\D3D9.cs" />
+    <Compile Include="Hook\DX11\ContextState.cs" />
+    <Compile Include="Hook\DX11\DeviceManager.cs" />
+    <Compile Include="Hook\DX11\DXFont.cs" />
+    <Compile Include="Hook\DX11\DXImage.cs" />
+    <Compile Include="Hook\DX11\DXOverlayEngine.cs" />
+    <Compile Include="Hook\DX11\DXSprite.cs" />
+    <Compile Include="Hook\DX11\RendererBase.cs" />
+    <Compile Include="Hook\DX11\ScreenAlignedQuadRenderer.cs" />
+    <Compile Include="Hook\DX9FormatExtension.cs" />
+    <Compile Include="Hook\DX9\DXOverlayEngine.cs" />
+    <Compile Include="Hook\DXGI.cs" />
+    <Compile Include="Hook\DXHookD3D10.cs" />
+    <Compile Include="Hook\DXHookD3D10_1.cs" />
+    <Compile Include="Hook\DXHookD3D11.cs" />
+    <Compile Include="Hook\DXHookD3D9.cs" />
+    <Compile Include="Hook\FramesPerSecond.cs" />
+    <Compile Include="Hook\Hook.cs" />
+    <Compile Include="Hook\HookManager.cs" />
+    <Compile Include="Hook\IDXHook.cs" />
+    <Compile Include="Hook\SafeHGlobal.cs" />
+    <Compile Include="Hook\TextDisplay.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
